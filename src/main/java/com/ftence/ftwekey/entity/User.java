@@ -1,6 +1,6 @@
 package com.ftence.ftwekey.entity;
 
-import com._42ence.backend.enums.Role;
+import com.ftence.ftwekey.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
