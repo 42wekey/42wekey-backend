@@ -14,7 +14,31 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
      */
 
     @Query(value = "SELECT AVG(star_rating) FROM Rating, Comment WHERE Comment.rating_id=Rating.id AND Comment.subject_id=:subject", nativeQuery = true)
-    public Double starRatingAvg(@Param("subject") Long subject);
+    Double starRatingAvg(@Param("subject") Long subject);
+
+
+    /***
+     * 별점 선택지 각각의 개수
+     */
+
+    @Query(value = "SELECT COUNT(Rating.star_rating) FROM Comment, Rating " +
+            "WHERE Comment.subject_id=:subject AND Rating.star_rating=:rated AND Comment.rating_id=Rating.id"
+            , nativeQuery = true)
+    Integer starRatingCount(@Param("subject") Long subject, @Param("rated") int rated);
+
+
+
+
+//    /***
+//     * 별점 개수가 제일 많은 선택지의 퍼센테이지
+//     *
+//     */
+//    @Query(value = "SELECT COUNT(*) / (SELECT COUNT(*) FROM Comment WHERE Comment.subject_id = 1) * 100 AS percentage " +
+//            "FROM Comment, Rating " +
+//            "WHERE Comment.subject_id=:subject AND Rating.star_rating=:rated AND Comment.rating_id = Rating.id"
+//            , nativeQuery = true)
+//    Double starRatingPercentage(@Param("subject") Long subject, @Param("rated") int rated);
+//
 
 
     /***
@@ -31,94 +55,108 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     /***
      * Time taken 각각의 선택지 개수
      * @param subject
+     * @param value  a_week , two_week , three_week , a_month , three_month
      * @return
      */
-
     @Query(value = "SELECT COUNT(Rating.time_taken) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.time_taken = 'a_week' AND Comment.rating_id=Rating.id"
+            "WHERE Comment.subject_id=:subject AND Rating.time_taken=:value AND Comment.rating_id=Rating.id"
             , nativeQuery = true)
-    public Integer timeTakenAWeekCount(@Param("subject") Long subject);
+    public Integer timeTakenAWeekCount(@Param("subject") Long subject, @Param("value") String value);
 
-    @Query(value = "SELECT COUNT(Rating.time_taken) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.time_taken = 'two_week' AND Comment.rating_id=Rating.id"
-            , nativeQuery = true)
-    public Integer timeTakenTwoWeekCount(@Param("subject") Long subject);
 
-    @Query(value = "SELECT COUNT(Rating.time_taken) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.time_taken = 'three_week' AND Comment.rating_id=Rating.id"
-            , nativeQuery = true)
-    public Integer timeTakenThreeWeekCount(@Param("subject") Long subject);
 
-    @Query(value = "SELECT COUNT(Rating.time_taken) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.time_taken = 'a_month' AND Comment.rating_id=Rating.id"
+    /***
+     * Time Taken 각 결과에 해당하는 퍼센테이지 구하기
+     * @param subject
+     * @param rated    찾고자 하는 문자열 ex) a_week
+     * @return
+     */
+    @Query(value = "SELECT COUNT(*) / (SELECT COUNT(*) FROM Comment WHERE Comment.subject_id=:subject) * 100 AS percentage " +
+            "FROM Comment, Rating " +
+            "WHERE Comment.subject_id=:subject AND Rating.time_taken=:value AND Comment.rating_id = Rating.id"
             , nativeQuery = true)
-    public Integer timeTakenAMonthCount(@Param("subject") Long subject);
+    Double timeTakenPercentage(@Param("subject") Long subject, @Param("value") String value);
 
-    @Query(value = "SELECT COUNT(Rating.time_taken) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.time_taken = 'three_month' AND Comment.rating_id=Rating.id"
-            , nativeQuery = true)
-    public Integer timeTakenThreeMonthCount(@Param("subject") Long subject);
+
 
 
     /***
      * 학습량 선택지 개수
-     *
+     * @param subject
+     * @param value         low , middle , high
+     * @return
      */
 
     @Query(value = "SELECT COUNT(Rating.amount_study) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.amount_study = 'low' AND Comment.rating_id=Rating.id"
+            "WHERE Comment.subject_id=:subject AND Rating.amount_study=:value AND Comment.rating_id=Rating.id"
             , nativeQuery = true)
-    public Integer amountStudyLowCount(@Param("subject") Long subject);
+    public Integer amountStudyLowCount(@Param("subject") Long subject, @Param("value") String value);
 
-    @Query(value = "SELECT COUNT(Rating.amount_study) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.amount_study = 'middle' AND Comment.rating_id=Rating.id"
-            , nativeQuery = true)
-    public Integer amountStudyMiddleCount(@Param("subject") Long subject);
 
-    @Query(value = "SELECT COUNT(Rating.amount_study) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.amount_study = 'high' AND Comment.rating_id=Rating.id"
+    /***
+     * amount study 공부량 각 결과에 해당하는 퍼센테이지 구하기
+     * @param subject
+     * @param rated    찾고자 하는 문자열 low , middle , high
+     * @return
+     */
+    @Query(value = "SELECT COUNT(*) / (SELECT COUNT(*) FROM Comment WHERE Comment.subject_id=:subject) * 100 AS percentage " +
+            "FROM Comment, Rating " +
+            "WHERE Comment.subject_id=:subject AND Rating.amount_study=:value AND Comment.rating_id = Rating.id"
             , nativeQuery = true)
-    public Integer amountStudyHighCount(@Param("subject") Long subject);
+    Double amountStudyPercentage(@Param("subject") Long subject, @Param("value") String value);
+
 
     /***
      * 보너스 여부 개수
-     *
+     * @param subject
+     * @param value         no , little , complete
+     * @return
      */
-
     @Query(value = "SELECT COUNT(Rating.bonus) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.bonus = 'no' AND Comment.rating_id=Rating.id"
+            "WHERE Comment.subject_id=:subject AND Rating.bonus=:value AND Comment.rating_id=Rating.id"
             , nativeQuery = true)
-    public Integer bonusNoCount(@Param("subject") Long subject);
+    public Integer bonusNoCount(@Param("subject") Long subject, @Param("value") String value);
 
-    @Query(value = "SELECT COUNT(Rating.bonus) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.bonus = 'little' AND Comment.rating_id=Rating.id"
-            , nativeQuery = true)
-    public Integer bonusLittleCount(@Param("subject") Long subject);
 
-    @Query(value = "SELECT COUNT(Rating.bonus) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.bonus = 'complete' AND Comment.rating_id=Rating.id"
+    /***
+     * bonus 공부량 각 결과에 해당하는 퍼센테이지 구하기
+     * @param subject
+     * @param value    찾고자 하는 문자열 low , middle , high
+     * @return
+     */
+    @Query(value = "SELECT COUNT(*) / (SELECT COUNT(*) FROM Comment WHERE Comment.subject_id=:subject) * 100 AS percentage " +
+            "FROM Comment, Rating " +
+            "WHERE Comment.subject_id=:subject AND Rating.bonus=:value AND Comment.rating_id = Rating.id"
             , nativeQuery = true)
-    public Integer bonusCompleteCount(@Param("subject") Long subject);
+    Double bonusPercentage(@Param("subject") Long subject, @Param("value") String value);
+
 
 
     /***
      * 체감 난이도 개수
+     * @param subject
+     * @param value         easy , normal ,hard
+     * @return
      */
 
     @Query(value = "SELECT COUNT(Rating.difficulty) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.difficulty = 'easy' AND Comment.rating_id=Rating.id"
+            "WHERE Comment.subject_id=:subject AND Rating.difficulty=:value AND Comment.rating_id=Rating.id"
             , nativeQuery = true)
-    public Integer difficultyEasyCount(@Param("subject") Long subject);
+    public Integer difficultyEasyCount(@Param("subject") Long subject, @Param("value") String value);
 
-    @Query(value = "SELECT COUNT(Rating.difficulty) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.difficulty = 'normal' AND Comment.rating_id=Rating.id"
-            , nativeQuery = true)
-    public Integer difficultyNormalCount(@Param("subject") Long subject);
 
-    @Query(value = "SELECT COUNT(Rating.difficulty) FROM Comment, Rating " +
-            "WHERE Comment.subject_id=:subject AND Rating.difficulty = 'hard' AND Comment.rating_id=Rating.id"
+    /***
+     * bonus 공부량 각 결과에 해당하는 퍼센테이지 구하기
+     * @param subject
+     * @param value    찾고자 하는 문자열 easy , normal ,hard
+     * @return
+     */
+    @Query(value = "SELECT COUNT(*) / (SELECT COUNT(*) FROM Comment WHERE Comment.subject_id=:subject) * 100 AS percentage " +
+            "FROM Comment, Rating " +
+            "WHERE Comment.subject_id=:subject AND Rating.difficulty=:value AND Comment.rating_id = Rating.id"
             , nativeQuery = true)
-    public Integer difficultyHardCount(@Param("subject") Long subject);
+    Double  difficultyPercentage(@Param("subject") Long subject, @Param("value") String value);
+
 
 }
 

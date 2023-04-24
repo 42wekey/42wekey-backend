@@ -1,6 +1,5 @@
-package com.ftence.ftwekey.dto;
+package com.ftence.ftwekey.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
@@ -11,8 +10,7 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class SubjectRankInfoDTO {
 
-    @JsonProperty("subject_name")
-    private String name;
+    private String subjectName;
     private int circle;
     private double starRating;
 }

@@ -1,4 +1,4 @@
-package com.ftence.ftwekey.dto;
+package com.ftence.ftwekey.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

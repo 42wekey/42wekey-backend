@@ -1,4 +1,4 @@
-package com.ftence.ftwekey.dto;
+package com.ftence.ftwekey.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
