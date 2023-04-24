@@ -1,6 +1,7 @@
 package com.ftence.ftwekey.service;
 
 import com.ftence.ftwekey.config.auth.PrincipalDetails;
+import com.ftence.ftwekey.dto.response.UserInfoDTO;
 import com.ftence.ftwekey.entity.Project;
 import com.ftence.ftwekey.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service
 public class UserService {
+
+    public UserInfoDTO getUserInfo(PrincipalDetails user) {
+
+        return UserInfoDTO.builder()
+                .intraId(user.getUsername())
+                .level(user.getLevel())
+                .build();
+    }
 
     public Project getUserProjectInfo(User user, Map<String, Object> userInfo) {
 
