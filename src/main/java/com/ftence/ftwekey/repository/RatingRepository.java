@@ -68,7 +68,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     /***
      * Time Taken 각 결과에 해당하는 퍼센테이지 구하기
      * @param subject
-     * @param rated    찾고자 하는 문자열 ex) a_week
+     * @param value    찾고자 하는 문자열 ex) a_week
      * @return
      */
     @Query(value = "SELECT COUNT(*) / (SELECT COUNT(*) FROM Comment WHERE Comment.subject_id=:subject) * 100 AS percentage " +
@@ -96,7 +96,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     /***
      * amount study 공부량 각 결과에 해당하는 퍼센테이지 구하기
      * @param subject
-     * @param rated    찾고자 하는 문자열 low , middle , high
+     * @param value    찾고자 하는 문자열 low , middle , high
      * @return
      */
     @Query(value = "SELECT COUNT(*) / (SELECT COUNT(*) FROM Comment WHERE Comment.subject_id=:subject) * 100 AS percentage " +

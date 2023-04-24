@@ -47,4 +47,6 @@ public class Comment {
 
     @UpdateTimestamp
     private LocalDateTime updateTime;
+
+    private int likeCnt;
 }
