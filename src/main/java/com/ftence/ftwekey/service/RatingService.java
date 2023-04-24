@@ -59,7 +59,7 @@ public class RatingService {
 
     }
 
-    public RatingValueDTO getRatingValueDTO(Subject subject, String status, String values) {
+    private RatingValueDTO getRatingValueDTO(Subject subject, String status, String values) {
 
         List<String> value = List.of(values.split(", "));
 
