@@ -6,11 +6,9 @@ import com.ftence.ftwekey.dto.response.RecentCommentDTO;
 import com.ftence.ftwekey.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -31,5 +29,11 @@ public class CommentController {
                                                @PathVariable String subjectName) {
 
         return commentService.getSubjectComments(user, subjectName);
+    }
+
+    @RequestMapping(value="/{commentId}/like" , method = {RequestMethod.POST, RequestMethod.DELETE})
+    public void setCommentLike(@AuthenticationPrincipal PrincipalDetails user, @PathVariable Long commentId) {
+
+        commentService.setCommentLike(user, commentId);
     }
 }

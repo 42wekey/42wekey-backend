@@ -13,6 +13,7 @@ import com.ftence.ftwekey.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,6 +52,22 @@ public class CommentService {
                 .collect(Collectors.toList());
 
         return list;
+    }
+
+    public void setCommentLike(PrincipalDetails user, Long commentId) {
+
+        Comment comment = commentRepository.findById(commentId).get();
+        // todo commentId 검증
+        List<Heart> hearts = heartRepository.getUserLikedThisComment(comment.getId(), user.getUser().getId());
+
+        if (hearts.size() > 0 ) {
+
+            heartRepository.deleteAll(hearts);
+        }
+        else {
+
+            heartRepository.save(new Heart(null, comment, user.getUser()));
+        }
     }
 
 
