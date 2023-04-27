@@ -1,10 +1,10 @@
 package com.ftence.ftwekey.service;
 
 import com.ftence.ftwekey.config.auth.PrincipalDetails;
+import com.ftence.ftwekey.dto.response.UserCommentDTO;
 import com.ftence.ftwekey.dto.response.UserInfoDTO;
 import com.ftence.ftwekey.dto.response.UserMeInfoDTO;
-import com.ftence.ftwekey.entity.Project;
-import com.ftence.ftwekey.entity.User;
+import com.ftence.ftwekey.entity.*;
 import com.ftence.ftwekey.repository.CommentRepository;
 import com.ftence.ftwekey.repository.HeartRepository;
 import com.ftence.ftwekey.repository.UserRepository;
@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -44,6 +46,17 @@ public class UserService {
                 .cntComment(cntComment)
                 .cntLikes(cntLikes)
                 .build();
+    }
+
+    public List<UserCommentDTO> getUserComments(String intraId) {
+
+        // todo 예외 처리
+        User user = userRepository.findByIntraId(intraId);
+
+        return commentRepository.getUserComments(user.getId())
+                .stream()
+                .map(this::convertEntityToMyCommentDto)
+                .collect(Collectors.toList());
     }
 
     public Project getUserProjectInfo(User user, Map<String, Object> userInfo) {
@@ -305,5 +318,26 @@ public class UserService {
         }
 
         return project;
+    }
+
+
+    private UserCommentDTO convertEntityToMyCommentDto(Comment comment) {
+
+        Subject subject = comment.getSubject();
+        Rating rating = comment.getRating();
+
+        return UserCommentDTO.builder()
+                .circle(subject.getCircle())
+                .subjectName(subject.getName())
+                .commentId(comment.getId())
+                .content(comment.getContent())
+                .updateTime(comment.getUpdateTime())
+                .starRating(rating.getStarRating())
+                .timeTaken(rating.getTimeTaken())
+                .amountStudy(rating.getAmountStudy())
+                .bonus(rating.getBonus())
+                .difficulty(rating.getDifficulty())
+                .likeNum(comment.getLikeCnt())
+                .build();
     }
 }
