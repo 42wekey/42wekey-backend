@@ -2,8 +2,12 @@ package com.ftence.ftwekey.service;
 
 import com.ftence.ftwekey.config.auth.PrincipalDetails;
 import com.ftence.ftwekey.dto.response.UserInfoDTO;
+import com.ftence.ftwekey.dto.response.UserMeInfoDTO;
 import com.ftence.ftwekey.entity.Project;
 import com.ftence.ftwekey.entity.User;
+import com.ftence.ftwekey.repository.CommentRepository;
+import com.ftence.ftwekey.repository.HeartRepository;
+import com.ftence.ftwekey.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +19,30 @@ import java.util.Map;
 @Service
 public class UserService {
 
-    public UserInfoDTO getUserInfo(PrincipalDetails user) {
+    private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final HeartRepository heartRepository;
 
-        return UserInfoDTO.builder()
+    public UserMeInfoDTO getMyInfo(PrincipalDetails user) {
+
+        return UserMeInfoDTO.builder()
                 .intraId(user.getUsername())
                 .level(user.getLevel())
+                .build();
+    }
+
+    public UserInfoDTO getUserInfo(String intraId) {
+
+        // todo 예외 처리
+        User user = userRepository.findByIntraId(intraId);
+
+        int cntComment = commentRepository.getUserCommentCnt(user.getId());
+        int cntLikes = heartRepository.getUserLikesCnt(user.getId());
+
+        return UserInfoDTO.builder()
+                .userLevel(user.getLevel())
+                .cntComment(cntComment)
+                .cntLikes(cntLikes)
                 .build();
     }
 

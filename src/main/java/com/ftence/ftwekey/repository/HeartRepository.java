@@ -13,5 +13,7 @@ public interface HeartRepository extends JpaRepository<Heart, Long> {
     @Query(value = "SELECT * FROM Heart WHERE Heart.comment_id=:comment AND Heart.user_id=:user", nativeQuery = true)
     List<Heart> getUserLikedThisComment (@Param("comment") Long comment, @Param("user") Long user);
 
+    @Query(value = "SELECT COUNT(*) FROM Heart WHERE Heart.user_id=:user", nativeQuery = true)
+    int getUserLikesCnt(@Param("user") Long user);
 }
 
