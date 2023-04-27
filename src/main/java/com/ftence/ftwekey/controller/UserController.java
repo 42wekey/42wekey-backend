@@ -1,6 +1,7 @@
 package com.ftence.ftwekey.controller;
 
 import com.ftence.ftwekey.config.auth.PrincipalDetails;
+import com.ftence.ftwekey.dto.response.LikeCommentDTO;
 import com.ftence.ftwekey.dto.response.UserCommentDTO;
 import com.ftence.ftwekey.dto.response.UserInfoDTO;
 import com.ftence.ftwekey.dto.response.UserMeInfoDTO;
@@ -37,5 +38,11 @@ public class UserController {
     public List<UserCommentDTO> getUserComments(@PathVariable String intraId) {
 
         return userService.getUserComments(intraId);
+    }
+
+    @GetMapping("/{intraId}/like")
+    public List<LikeCommentDTO> getUserLikeComments(@PathVariable String intraId) {
+
+        return userService.getUserLikeComments(intraId);
     }
 }
