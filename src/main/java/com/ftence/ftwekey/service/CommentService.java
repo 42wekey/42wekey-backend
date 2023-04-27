@@ -88,6 +88,27 @@ public class CommentService {
         convertCommentRequestDtoToEntity(subject, commentRequestDTO, user);
     }
 
+    public void editComment(Long commentId, CommentRequestDTO commentRequestDTO, PrincipalDetails user) {
+
+        // todo 예외 처리
+        // todo 1 작성자가 가 맞는지, 2 findbyid 예외처리
+        Comment comment = commentRepository.findById(commentId).get();
+        Rating rating = comment.getRating();
+
+        rating.setStarRating(commentRequestDTO.getStarRating());
+        rating.setTimeTaken(commentRequestDTO.getTimeTaken());
+        rating.setAmountStudy(commentRequestDTO.getAmountStudy());
+        rating.setBonus(commentRequestDTO.getBonus());
+        rating.setDifficulty(commentRequestDTO.getDifficulty());
+
+        ratingRepository.save(rating);
+
+        comment.setContent(commentRequestDTO.getContent());
+        comment.setUserLevel(user.getLevel());
+
+        commentRepository.save(comment);
+    }
+
     private CommentDTO convertEntityToCommentDTO(Comment comment, User user, Subject subject) {
 
         boolean isLiked;

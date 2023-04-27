@@ -46,4 +46,13 @@ public class CommentController {
 
         commentService.createComment(subjectName, commentRequestDTO, user);
     }
+
+    @PostMapping("/{commentId}/edit")
+    public void editComment(@PathVariable Long commentId,
+                            @RequestBody CommentRequestDTO commentRequestDTO,
+                            @AuthenticationPrincipal PrincipalDetails user) {
+
+        // todo commentId 검증
+        commentService.editComment(commentId, commentRequestDTO, user);
+    }
 }
