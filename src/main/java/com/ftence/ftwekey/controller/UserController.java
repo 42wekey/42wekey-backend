@@ -1,7 +1,7 @@
 package com.ftence.ftwekey.controller;
 
 import com.ftence.ftwekey.config.auth.PrincipalDetails;
-import com.ftence.ftwekey.dto.response.UserInfoDTO;
+import com.ftence.ftwekey.dto.response.UserMeInfoDTO;
 import com.ftence.ftwekey.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public UserInfoDTO getUserInfo(@AuthenticationPrincipal PrincipalDetails user) {
+    public UserMeInfoDTO getUserInfo(@AuthenticationPrincipal PrincipalDetails user) {
 
         return userService.getUserInfo(user);
     }

@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class UserInfoDTO {
+public class UserMeInfoDTO {
     private String intraId;
     private Double level;
 }
