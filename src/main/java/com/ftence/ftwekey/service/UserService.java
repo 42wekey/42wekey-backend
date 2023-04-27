@@ -56,7 +56,7 @@ public class UserService {
 
         return commentRepository.getUserComments(user.getId())
                 .stream()
-                .map(this::convertEntityToMyCommentDto)
+                .map(this::convertEntityToUserCommentDto)
                 .collect(Collectors.toList());
     }
 
@@ -333,7 +333,7 @@ public class UserService {
     }
 
 
-    private UserCommentDTO convertEntityToMyCommentDto(Comment comment) {
+    private UserCommentDTO convertEntityToUserCommentDto(Comment comment) {
 
         Subject subject = comment.getSubject();
         Rating rating = comment.getRating();
