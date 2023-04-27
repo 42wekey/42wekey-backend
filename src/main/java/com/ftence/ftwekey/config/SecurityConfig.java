@@ -6,6 +6,7 @@ import com.ftence.ftwekey.config.oauth.CustomOAuth2UserService;
 import com.ftence.ftwekey.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,8 @@ public class SecurityConfig {
     private JwtUtil jwtUtil;
     @Autowired
     private UserRepository userRepository;
+    @Value("${front.uri}")
+    private String frontUri;
 
 
     @Bean
@@ -75,7 +78,7 @@ public class SecurityConfig {
                         System.out.println("login 로그인 성공");
                         String jwtToken = jwtUtil.makeAuthToken(authentication);
 
-                        response.sendRedirect("http://localhost:3000/?token=" + jwtToken);
+                        response.sendRedirect(frontUri + "/?token=" + jwtToken);
                     }
                 })
                 .failureHandler(new AuthenticationFailureHandler() {

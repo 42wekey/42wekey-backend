@@ -32,8 +32,8 @@ public class CommentController {
 
         return commentService.getSubjectComments(user, subjectName);
     }
-    
-    @RequestMapping(value = "/{commentId}/like", method = {RequestMethod.POST, RequestMethod.DELETE})
+
+    @PostMapping(value = "/{commentId}/like")
     public ResponseEntity<String> setCommentLike(@AuthenticationPrincipal PrincipalDetails user, @PathVariable Long commentId) {
 
         return commentService.setCommentLike(user, commentId);
