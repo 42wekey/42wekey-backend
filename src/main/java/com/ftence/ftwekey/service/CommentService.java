@@ -1,21 +1,23 @@
 package com.ftence.ftwekey.service;
 
 import com.ftence.ftwekey.config.auth.PrincipalDetails;
+import com.ftence.ftwekey.dto.request.CommentRequestDTO;
 import com.ftence.ftwekey.dto.response.CommentDTO;
 import com.ftence.ftwekey.dto.response.RecentCommentDTO;
-import com.ftence.ftwekey.entity.Comment;
-import com.ftence.ftwekey.entity.Heart;
-import com.ftence.ftwekey.entity.Subject;
-import com.ftence.ftwekey.entity.User;
+import com.ftence.ftwekey.entity.*;
 import com.ftence.ftwekey.repository.CommentRepository;
 import com.ftence.ftwekey.repository.HeartRepository;
+import com.ftence.ftwekey.repository.RatingRepository;
 import com.ftence.ftwekey.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final SubjectRepository subjectRepository;
     private final HeartRepository heartRepository;
+    private final RatingRepository ratingRepository;
 
     public List<RecentCommentDTO> getRecentComment() {
 
@@ -54,22 +57,36 @@ public class CommentService {
         return list;
     }
 
-    public void setCommentLike(PrincipalDetails user, Long commentId) {
+    public ResponseEntity<String> setCommentLike(PrincipalDetails user, Long commentId) {
 
-        Comment comment = commentRepository.findById(commentId).get();
-        // todo commentId 검증
-        List<Heart> hearts = heartRepository.getUserLikedThisComment(comment.getId(), user.getUser().getId());
+        try {
 
-        if (hearts.size() > 0 ) {
+            Comment comment = commentRepository.findById(commentId).get();
+            List<Heart> hearts = heartRepository.getUserLikedThisComment(comment.getId(), user.getUser().getId());
 
-            heartRepository.deleteAll(hearts);
-        }
-        else {
+            if (hearts.size() > 0) {
 
-            heartRepository.save(new Heart(null, comment, user.getUser()));
+                heartRepository.deleteAll(hearts);
+            } else {
+
+                heartRepository.save(new Heart(null, comment, user.getUser()));
+            }
+
+            return ResponseEntity.ok("Data processed successfully");
+
+        } catch (NoSuchElementException e) {
+
+            // todo log
+            System.out.println("comment id not valid");
+            return ResponseEntity.badRequest().body("Invalid data format");
         }
     }
 
+    public void createComment(String subjectName, CommentRequestDTO commentRequestDTO, PrincipalDetails user) {
+
+        Subject subject = subjectRepository.findByName(subjectName);
+        convertCommentRequestDtoToEntity(subject, commentRequestDTO, user);
+    }
 
     private CommentDTO convertEntityToCommentDTO(Comment comment, User user, Subject subject) {
 
@@ -95,5 +112,29 @@ public class CommentService {
                 .likeNum(comment.getLikeCnt())
                 .isLike(isLiked)
                 .build();
+    }
+
+    private void convertCommentRequestDtoToEntity(Subject subject, CommentRequestDTO commentRequestDTO, PrincipalDetails user) {
+
+        Rating rating = Rating.builder()
+                .starRating(commentRequestDTO.getStarRating())
+                .timeTaken(commentRequestDTO.getTimeTaken())
+                .amountStudy(commentRequestDTO.getAmountStudy())
+                .bonus(commentRequestDTO.getBonus())
+                .difficulty(commentRequestDTO.getDifficulty())
+                .build();
+
+        ratingRepository.save(rating);
+
+        Comment comment = Comment.builder()
+                .user(user.getUser())
+                .subject(subject)
+                .rating(rating)
+                .content(commentRequestDTO.getContent())
+                .userLevel(user.getLevel())
+                .likeCnt(0)
+                .build();
+
+        commentRepository.save(comment);
     }
 }
