@@ -60,12 +60,11 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public List<LikeCommentDTO> getUserLikeComments(String intraId) {
+    public List<LikeCommentDTO> getUserLikeComments(PrincipalDetails user) {
 
         // todo 예외 처리
-        User user = userRepository.findByIntraId(intraId);
 
-        return heartRepository.getUserLikeComments(user.getId())
+        return heartRepository.getUserLikeComments(user.getUser().getId())
                 .stream()
                 .map(this::convertEntityToLikeCommentDto)
                 .collect(Collectors.toList());

@@ -40,9 +40,9 @@ public class UserController {
         return userService.getUserComments(intraId);
     }
 
-    @GetMapping("/{intraId}/like")
-    public List<LikeCommentDTO> getUserLikeComments(@PathVariable String intraId) {
+    @GetMapping("/me/like")
+    public List<LikeCommentDTO> getUserLikeComments(@AuthenticationPrincipal PrincipalDetails user) {
 
-        return userService.getUserLikeComments(intraId);
+        return userService.getUserLikeComments(user);
     }
 }
