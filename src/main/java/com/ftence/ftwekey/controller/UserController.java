@@ -45,4 +45,10 @@ public class UserController {
 
         return userService.getUserLikeComments(user);
     }
+
+    @GetMapping("/me/reviewed")
+    public List<String> getReviewedSubjects(@AuthenticationPrincipal PrincipalDetails user) {
+
+        return userService.getReviewedSubjects(user);
+    }
 }
