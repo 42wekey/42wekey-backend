@@ -1,10 +1,7 @@
 package com.ftence.ftwekey.controller;
 
 import com.ftence.ftwekey.config.auth.PrincipalDetails;
-import com.ftence.ftwekey.dto.response.LikeCommentDTO;
-import com.ftence.ftwekey.dto.response.UserCommentDTO;
-import com.ftence.ftwekey.dto.response.UserInfoDTO;
-import com.ftence.ftwekey.dto.response.UserMeInfoDTO;
+import com.ftence.ftwekey.dto.response.*;
 import com.ftence.ftwekey.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -49,6 +46,12 @@ public class UserController {
     @GetMapping("/me/reviewed")
     public List<String> getReviewedSubjects(@AuthenticationPrincipal PrincipalDetails user) {
 
-        return userService.getReviewedSubjects(user);
+        return userService.getReviewedSubjects(user.getUser());
+    }
+
+    @GetMapping("/{intraId}/unreviewed")
+    public List<UnreviewedSubjectDTO> getUnreviewedSubjects(@PathVariable String intraId) {
+
+        return userService.getUnreviewedSubjects(intraId);
     }
 }
