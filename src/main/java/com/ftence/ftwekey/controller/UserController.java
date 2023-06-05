@@ -31,13 +31,13 @@ public class UserController {
         return userService.getUserInfo(intraId);
     }
 
-    @GetMapping("/{intraId}/comment")
+    @GetMapping("/{intraId}/comments")
     public List<UserCommentDTO> getUserComments(@PathVariable String intraId) {
 
         return userService.getUserComments(intraId);
     }
 
-    @GetMapping("/me/like")
+    @GetMapping("/me/likes")
     public List<LikeCommentDTO> getUserLikeComments(@AuthenticationPrincipal PrincipalDetails user) {
 
         return userService.getUserLikeComments(user);
