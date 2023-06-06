@@ -9,5 +9,4 @@ import lombok.Data;
 public class WikiRequestDTO {
     private String content;
     private Long id;
-    private String intraId;
 }
