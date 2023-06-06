@@ -2,10 +2,11 @@ package com.ftence.ftwekey.config.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ftence.ftwekey.entity.User;
+import com.ftence.ftwekey.exception.login.NotValidTokenException;
 import com.ftence.ftwekey.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+@Slf4j
 @Service
 public class JwtUtil {
     @Value("${jwt.secret-key}")
@@ -49,19 +51,21 @@ public class JwtUtil {
                 .withIssuedAt(new Date())
                 .sign(Algorithm.HMAC256(tokenSecret));
 
-        System.out.println(token);
-
         return token;
     }
 
     public VerifyResult verifyToken(String token) {
 
+        String sub = null;
+        Long id = 0L;
+        double level = 0;
+
         try {
             DecodedJWT verify = JWT.require(Algorithm.HMAC256(tokenSecret)).build().verify(token);
 
-            String sub = verify.getClaim("sub").asString();
-            Long id = verify.getClaim("id").asLong();
-            double level = verify.getClaim("level").asDouble();
+            sub = verify.getClaim("sub").asString();
+            id = verify.getClaim("id").asLong();
+            level = verify.getClaim("level").asDouble();
 
             User user = userRepository.findByUniqueId(id);
 
@@ -75,10 +79,10 @@ public class JwtUtil {
                     .level(level)
                     .build();
 
-        } catch (NullPointerException | JWTDecodeException  | NoResultException e) {
-            return VerifyResult.builder()
-                    .success(false)
-                    .build();
+        } catch (Exception e) {
+
+            log.error("JWT 인증 실패. [{}]  sub={}, id={}, level={}, token={}", e, sub, id, level, token);
+            throw new NotValidTokenException(e.getClass().getSimpleName());
         }
     }
 }

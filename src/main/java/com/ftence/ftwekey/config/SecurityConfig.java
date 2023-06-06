@@ -3,12 +3,14 @@ package com.ftence.ftwekey.config;
 import com.ftence.ftwekey.config.jwt.JwtAuthenticationFilter;
 import com.ftence.ftwekey.config.jwt.JwtUtil;
 import com.ftence.ftwekey.config.oauth.CustomOAuth2UserService;
+import com.ftence.ftwekey.exception.login.JwtExceptionFilter;
 import com.ftence.ftwekey.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -35,12 +38,9 @@ import java.io.IOException;
 public class SecurityConfig {
 
     private final CorsFilter corsFilter;
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
-    @Autowired
-    private JwtUtil jwtUtil;
-    @Autowired
-    private UserRepository userRepository;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
     @Value("${front.uri}")
     private String frontUri;
 
@@ -49,6 +49,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userRepository), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class);
 
         http
                 .csrf().disable()
@@ -58,12 +59,12 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers("/user/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/subject/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/comment/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .anyRequest()
-                .permitAll()
+                .antMatchers("/user/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_GOD')")
+                .antMatchers("/subject/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_GOD')")
+                .antMatchers("/comment/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_GOD')")
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_GOD')")
+                .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
+                .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
@@ -75,7 +76,7 @@ public class SecurityConfig {
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                                         Authentication authentication) throws IOException, ServletException {
 
-                        System.out.println("login 로그인 성공");
+                        log.info("oauth2 로그인 성공 {}", authentication.getName());
                         String jwtToken = jwtUtil.makeAuthToken(authentication);
 
                         response.sendRedirect(frontUri + "/?token=" + jwtToken);
@@ -86,7 +87,7 @@ public class SecurityConfig {
                     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                                         AuthenticationException exception) throws IOException, ServletException {
 
-                        System.out.println("로그인 실패");
+                        log.error("oauth2 로그인 실패 {}", exception.getMessage());
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
                     }
                 })
