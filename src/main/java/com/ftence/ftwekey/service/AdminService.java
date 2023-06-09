@@ -41,6 +41,7 @@ public class AdminService {
     private void convertSubjectRequestDtoToEntityForCreate(SubjectRequestDTO subjectRequestDTO) {
 
         Subject subject = Subject.builder()
+                .name(subjectRequestDTO.getSubjectName())
                 .circle(subjectRequestDTO.getCircle())
                 .info(subjectRequestDTO.getSubjectInfo())
                 .wikiId(0L)
