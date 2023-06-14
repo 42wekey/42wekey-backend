@@ -81,20 +81,22 @@ public class UserService {
         List<String> completeSubjects = getCompleteSubjects(project);
         List<String> reviewedSubjects = getReviewedSubjects(user);
 
-        System.out.println(completeSubjects);
-        System.out.println(reviewedSubjects);
 
         for (String s : completeSubjects) {
 
             if (reviewedSubjects.contains(s))
                 completeSubjects.remove(s);
         }
-        System.out.println(completeSubjects);
 
-        return completeSubjects
-                .stream()
-                .map(this::convertEntityToUnreviewedSubjectDto)
-                .collect(Collectors.toList());
+        try {
+            return completeSubjects
+                    .stream()
+                    .map(this::convertEntityToUnreviewedSubjectDto)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException e) {
+
+            return null;
+        }
     }
 
     private UserCommentDTO convertEntityToUserCommentDto(Comment comment) {
