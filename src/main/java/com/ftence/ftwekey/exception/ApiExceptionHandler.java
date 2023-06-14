@@ -27,15 +27,6 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, httpStatus);
     }
 
-    @ExceptionHandler(value = {NullPointerException.class})
-    public ResponseEntity<Object> handleEmptyValueException(NullPointerException e) {
-
-        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        ApiException apiException = new ApiException(e.getClass().getSimpleName(), httpStatus, ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
-
-        return new ResponseEntity<>(apiException, httpStatus);
-    }
-
     @ExceptionHandler(RequestRejectedException.class)
     public ResponseEntity<Object> handleRequestRejectedException(RequestRejectedException e) {
 

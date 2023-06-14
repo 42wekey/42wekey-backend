@@ -61,6 +61,11 @@ public class SubjectController {
     @GetMapping("/{subjectName}/rating")
     public SubjectRatingDTO getRatingAverage(@PathVariable String subjectName) {
 
-        return ratingService.getRatingAverage(subjectName);
+        try {
+            return ratingService.getRatingAverage(subjectName);
+        }
+        catch (NullPointerException e){
+            return null;
+        }
     }
 }

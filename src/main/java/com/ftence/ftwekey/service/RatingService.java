@@ -28,7 +28,6 @@ public class RatingService {
     private String difficultyValue;
 
     private final RatingRepository ratingRepository;
-    private final CommentRepository commentRepository;
     private final SubjectRepository subjectRepository;
 
     public SubjectRatingDTO getRatingAverage(String subjectName) {
@@ -56,7 +55,6 @@ public class RatingService {
                 .bonus(getRatingValueDTO(subject, "bonus", timeTakenValue))
                 .difficulty(getRatingValueDTO(subject, "difficulty", timeTakenValue))
                 .build();
-
     }
 
     private RatingValueDTO getRatingValueDTO(Subject subject, String status, String values) {
@@ -83,7 +81,6 @@ public class RatingService {
                     break;
                 default:
                     break;
-                    // 에러처리
             }
         }
 
@@ -110,7 +107,6 @@ public class RatingService {
             default:
                 title = "error";
                 break;
-            // todo 에러 처리
         }
 
         return RatingValueDTO.builder()
