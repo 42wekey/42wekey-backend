@@ -27,6 +27,16 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, httpStatus);
     }
 
+    @ExceptionHandler(value = {UsernameException.class})
+    public ResponseEntity<Object> invalidUserException(UsernameException e) {
+
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+
+        ApiException apiException = new ApiException(e.getClass().getSimpleName(), httpStatus, ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
+
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
     @ExceptionHandler(RequestRejectedException.class)
     public ResponseEntity<Object> handleRequestRejectedException(RequestRejectedException e) {
 
@@ -35,4 +45,6 @@ public class ApiExceptionHandler {
 
         return new ResponseEntity<>(apiException, httpStatus);
     }
+
+
 }
