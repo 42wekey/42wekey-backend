@@ -3,6 +3,7 @@ package com.ftence.ftwekey.service;
 import com.ftence.ftwekey.config.auth.PrincipalDetails;
 import com.ftence.ftwekey.dto.response.*;
 import com.ftence.ftwekey.entity.*;
+import com.ftence.ftwekey.exception.UsernameException;
 import com.ftence.ftwekey.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -80,16 +81,17 @@ public class UserService {
 
         List<String> completeSubjects = getCompleteSubjects(project);
         List<String> reviewedSubjects = getReviewedSubjects(user);
+        List<String> unreviewedSubjects = new ArrayList<>();
 
 
         for (String s : completeSubjects) {
 
-            if (reviewedSubjects.contains(s))
-                completeSubjects.remove(s);
+            if (!reviewedSubjects.contains(s))
+                unreviewedSubjects.add(s);
         }
 
         try {
-            return completeSubjects
+            return unreviewedSubjects
                     .stream()
                     .map(this::convertEntityToUnreviewedSubjectDto)
                     .collect(Collectors.toList());
@@ -220,6 +222,8 @@ public class UserService {
 
         // todo 예외처리
         Subject subject = subjectRepository.findByName(subjectName);
+        String a= subject.getName();
+        int b = subject.getCircle();
         return new UnreviewedSubjectDTO(subject.getName(), subject.getCircle());
     }
 }
