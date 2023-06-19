@@ -10,6 +10,7 @@ import com.ftence.ftwekey.repository.HeartRepository;
 import com.ftence.ftwekey.repository.RatingRepository;
 import com.ftence.ftwekey.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CommentService {
@@ -76,8 +78,7 @@ public class CommentService {
 
         } catch (NoSuchElementException e) {
 
-            // todo log
-            System.out.println("comment id not valid");
+            log.error("comment id not valid. id={}", commentId);
             return ResponseEntity.badRequest().body("Invalid data format");
         }
     }
@@ -144,7 +145,6 @@ public class CommentService {
                 .bonus(commentRequestDTO.getBonus())
                 .difficulty(commentRequestDTO.getDifficulty())
                 .build();
-
         ratingRepository.save(rating);
 
         Comment comment = Comment.builder()
@@ -155,7 +155,9 @@ public class CommentService {
                 .userLevel(user.getLevel())
                 .likeCnt(0)
                 .build();
-
         commentRepository.save(comment);
+
+        subject.setCommentCnt(subject.getCommentCnt() + 1);
+        subjectRepository.save(subject);
     }
 }
