@@ -69,10 +69,13 @@ public class CommentService {
             if (hearts.size() > 0) {
 
                 heartRepository.deleteAll(hearts);
+                comment.setLikeCnt(comment.getLikeCnt() - 1);
             } else {
 
                 heartRepository.save(new Heart(null, comment, user.getUser()));
+                comment.setLikeCnt(comment.getLikeCnt() + 1);
             }
+            commentRepository.save(comment);
 
             return ResponseEntity.ok("Data processed successfully");
 
@@ -86,6 +89,10 @@ public class CommentService {
     public void createComment(String subjectName, CommentRequestDTO commentRequestDTO, PrincipalDetails user) {
 
         Subject subject = subjectRepository.findByName(subjectName);
+
+        // 서브젝트에 이미 후기를 작성했는지 확인
+        if (commentRepository.checkAlreadyReviewed(user.getUser().getId(), subject.getId()) == 1)
+            return; // todo 프론트에서 어떻게 처리할지 생각하기
         convertCommentRequestDtoToEntity(subject, commentRequestDTO, user);
     }
 
