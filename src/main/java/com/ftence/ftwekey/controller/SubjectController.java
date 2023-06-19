@@ -36,9 +36,10 @@ public class SubjectController {
     }
 
     @GetMapping("/{subjectName}/description")
-    public SubjectDescriptionDTO getSubjectDescription(@PathVariable String subjectName) {
+    public SubjectDescriptionDTO getSubjectDescription(@AuthenticationPrincipal PrincipalDetails user,
+                                                       @PathVariable String subjectName) {
 
-        return subjectService.getDescription(subjectName);
+        return subjectService.getDescription(subjectName, user.getUser());
     }
 
     @GetMapping("/{subjectName}/wiki")

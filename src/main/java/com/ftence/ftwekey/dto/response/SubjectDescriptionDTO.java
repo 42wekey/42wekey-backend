@@ -11,4 +11,5 @@ import lombok.Data;
 public class SubjectDescriptionDTO {
 
     private String subjectDescription;
+    private boolean isSuccess;
 }
