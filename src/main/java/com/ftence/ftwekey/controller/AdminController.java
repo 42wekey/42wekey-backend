@@ -21,10 +21,10 @@ public class AdminController {
         return adminService.getSubjectList();
     }
 
-    @GetMapping("/subjects/{subjectName}")
-    public SubjectRequestDTO getSubjectInfo(@PathVariable String subjectName) {
+    @GetMapping("/subjects/{subjectId}")
+    public SubjectRequestDTO getSubjectInfo(@PathVariable Long subjectId) {
 
-        return adminService.getSubjectInfo(subjectName);
+        return adminService.getSubjectInfo(subjectId);
     }
 
     @PostMapping("/subjects/create")
@@ -33,15 +33,15 @@ public class AdminController {
         adminService.createSubject(subjectRequestDTO);
     }
 
-    @PostMapping("/subjects/{subjectName}/edit")
-    public void editSubject(@PathVariable String subjectName, @RequestBody SubjectRequestDTO subjectRequestDTO) {
+    @PostMapping("/subjects/{subjectId}/edit")
+    public void editSubject(@PathVariable Long subjectId, @RequestBody SubjectRequestDTO subjectRequestDTO) {
 
-        adminService.editSubject(subjectName, subjectRequestDTO);
+        adminService.editSubject(subjectId, subjectRequestDTO);
     }
 
-    @DeleteMapping("/subjects/{subjectName}/delete")
-    public void deleteSubject(@PathVariable String subjectName) {
+    @DeleteMapping("/subjects/{subjectId}/delete")
+    public void deleteSubject(@PathVariable Long subjectId) {
 
-        adminService.deleteSubject(subjectName);
+        adminService.deleteSubject(subjectId);
     }
 }

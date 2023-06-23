@@ -1,14 +1,12 @@
 package com.ftence.ftwekey.service;
 
 import com.ftence.ftwekey.dto.request.SubjectRequestDTO;
-import com.ftence.ftwekey.entity.Subject;
-import com.ftence.ftwekey.entity.Wiki;
-import com.ftence.ftwekey.repository.SubjectRepository;
-import com.ftence.ftwekey.repository.UserRepository;
-import com.ftence.ftwekey.repository.WikiRepository;
+import com.ftence.ftwekey.entity.*;
+import com.ftence.ftwekey.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +17,9 @@ public class AdminService {
     private final SubjectRepository subjectRepository;
     private final UserRepository userRepository;
     private final WikiRepository wikiRepository;
+    private final CommentRepository commentRepository;
+    private final HeartRepository heartRepository;
+    private final RatingRepository ratingRepository;
 
     public List<SubjectRequestDTO> getSubjectList() {
 
@@ -30,12 +31,12 @@ public class AdminService {
                 .collect(Collectors.toList());
     }
 
-    public SubjectRequestDTO getSubjectInfo(String subjectName) {
+    public SubjectRequestDTO getSubjectInfo(Long subjectId) {
 
-        Subject subject = subjectRepository.findByName(subjectName);
+        Subject subject = subjectRepository.findById(subjectId).get();
 
         return SubjectRequestDTO.builder()
-                .subjectName(subjectName)
+                .subjectName(subject.getName())
                 .circle(subject.getCircle())
                 .subjectInfo(subject.getInfo())
                 .description(subject.getDescription())
@@ -47,19 +48,31 @@ public class AdminService {
         convertSubjectRequestDtoToEntityForCreate(subjectRequestDTO);
     }
 
-    public void editSubject(String subjectName, SubjectRequestDTO subjectRequestDTO) {
+    public void editSubject(Long subjectId, SubjectRequestDTO subjectRequestDTO) {
 
-        // todo 예외 처리
-        Subject subject = subjectRepository.findByName(subjectName);
+        Subject subject = subjectRepository.findById(subjectId).get();
 
         convertSubjectRequestDtoToEntityForEdit(subject, subjectRequestDTO);
     }
 
-    public void deleteSubject(String subjectName) {
+    public void deleteSubject(Long subjectName) {
 
-        // todo 예외처리
-        Subject subject = subjectRepository.findByName(subjectName);
+        Subject subject = subjectRepository.findById(subjectName).get();
+        List<Wiki> wikis = wikiRepository.findBySubject(subject);
+        List<Comment> comments = commentRepository.findBySubject(subject);
+        List<Heart> hearts = new ArrayList<>();
+        List<Rating> ratings = new ArrayList<>();
 
+        for (Comment comment : comments)
+            hearts.addAll(heartRepository.findByComment(comment));
+
+        for (Comment comment : comments)
+            ratings.add(comment.getRating());
+
+        heartRepository.deleteAll(hearts);
+        ratingRepository.deleteAll(ratings);
+        commentRepository.deleteAll(comments);
+        wikiRepository.deleteAll(wikis);
         subjectRepository.delete(subject);
     }
 
