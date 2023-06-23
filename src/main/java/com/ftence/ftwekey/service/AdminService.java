@@ -95,7 +95,6 @@ public class AdminService {
                 .wikiId(0L)
                 .description(subjectRequestDTO.getDescription())
                 .commentCnt(0)
-                .rating(0)
                 .build();
         subjectRepository.save(subject);
 

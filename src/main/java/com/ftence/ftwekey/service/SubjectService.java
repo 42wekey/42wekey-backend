@@ -5,6 +5,7 @@ import com.ftence.ftwekey.entity.Project;
 import com.ftence.ftwekey.entity.Subject;
 import com.ftence.ftwekey.entity.User;
 import com.ftence.ftwekey.repository.ProjectRepository;
+import com.ftence.ftwekey.repository.RatingRepository;
 import com.ftence.ftwekey.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class SubjectService {
 
     private final SubjectRepository subjectRepository;
     private final ProjectRepository projectRepository;
+    private final RatingRepository ratingRepository;
 
     public List<SubjectRankDTO> getRank() {
 
@@ -139,7 +141,7 @@ public class SubjectService {
             list.add(SubjectRankInfoDTO.builder()
                     .subjectName(s.getName())
                     .circle(s.getCircle())
-                    .starRating(s.getRating())
+                    .starRating(ratingRepository.starRatingAvg(s.getId()))
                     .build());
         }
 
