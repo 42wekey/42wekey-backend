@@ -51,9 +51,9 @@ public class RatingService {
                 .avgStarRating(ratingRepository.starRatingAvg(subject.getId()))
                 .totalStarRating(totalStarRating)
                 .timeTaken(getRatingValueDTO(subject, "timeTaken", timeTakenValue))
-                .amountStudy(getRatingValueDTO(subject, "amountStudy", timeTakenValue))
-                .bonus(getRatingValueDTO(subject, "bonus", timeTakenValue))
-                .difficulty(getRatingValueDTO(subject, "difficulty", timeTakenValue))
+                .amountStudy(getRatingValueDTO(subject, "amountStudy", amountStudyValue))
+                .bonus(getRatingValueDTO(subject, "bonus", bonusValue))
+                .difficulty(getRatingValueDTO(subject, "difficulty", difficultyValue))
                 .build();
     }
 
