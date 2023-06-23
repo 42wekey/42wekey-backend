@@ -30,6 +30,18 @@ public class AdminService {
                 .collect(Collectors.toList());
     }
 
+    public SubjectRequestDTO getSubjectInfo(String subjectName) {
+
+        Subject subject = subjectRepository.findByName(subjectName);
+
+        return SubjectRequestDTO.builder()
+                .subjectName(subjectName)
+                .circle(subject.getCircle())
+                .subjectInfo(subject.getInfo())
+                .description(subject.getDescription())
+                .build();
+    }
+
     public void createSubject(SubjectRequestDTO subjectRequestDTO) {
 
         convertSubjectRequestDtoToEntityForCreate(subjectRequestDTO);

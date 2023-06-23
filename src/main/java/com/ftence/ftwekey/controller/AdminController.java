@@ -21,8 +21,14 @@ public class AdminController {
         return adminService.getSubjectList();
     }
 
+    @GetMapping("/subjects/{subjectName}")
+    public SubjectRequestDTO getSubjectInfo(@PathVariable String subjectName) {
+
+        return adminService.getSubjectInfo(subjectName);
+    }
+
     @PostMapping("/subjects/create")
-    public void createSubject(@RequestBody SubjectRequestDTO subjectRequestDTO){
+    public void createSubject(@RequestBody SubjectRequestDTO subjectRequestDTO) {
 
         adminService.createSubject(subjectRequestDTO);
     }
