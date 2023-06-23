@@ -65,19 +65,22 @@ public class CommentService {
 
             Comment comment = commentRepository.findById(commentId).get();
             List<Heart> hearts = heartRepository.getUserLikedThisComment(comment.getId(), user.getUser().getId());
+            String body;
 
             if (hearts.size() > 0) {
 
                 heartRepository.deleteAll(hearts);
                 comment.setLikeCnt(comment.getLikeCnt() - 1);
+                body = "delete likes";
             } else {
 
                 heartRepository.save(new Heart(null, comment, user.getUser()));
                 comment.setLikeCnt(comment.getLikeCnt() + 1);
+                body = "add likes";
             }
             commentRepository.save(comment);
 
-            return ResponseEntity.ok("Data processed successfully");
+            return ResponseEntity.ok(body);
 
         } catch (NoSuchElementException e) {
 
