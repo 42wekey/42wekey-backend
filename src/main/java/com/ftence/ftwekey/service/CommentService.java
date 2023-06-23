@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -51,12 +49,10 @@ public class CommentService {
 
         Subject subject = subjectRepository.findByName(subjectName);
 
-        List<CommentDTO> list = commentRepository.findBySubject(subject)
+        return commentRepository.findBySubject(subject)
                 .stream()
                 .map(comment -> convertEntityToCommentDTO(comment, user.getUser(), subject))
                 .collect(Collectors.toList());
-
-        return list;
     }
 
     public ResponseEntity<String> setCommentLike(PrincipalDetails user, Long commentId) {
@@ -95,7 +91,7 @@ public class CommentService {
 
         // 서브젝트에 이미 후기를 작성했는지 확인
         if (commentRepository.checkAlreadyReviewed(user.getUser().getId(), subject.getId()) == 1)
-            return; // todo 프론트에서 어떻게 처리할지 생각하기
+            return;
         convertCommentRequestDtoToEntity(subject, commentRequestDTO, user);
     }
 
@@ -135,7 +131,7 @@ public class CommentService {
                 .userLevel(comment.getUserLevel())
                 .commentId(comment.getId())
                 .content(comment.getContent())
-                .updateTime(comment.getUpdateTime())
+                .createTime(comment.getCreateTime())
                 .starRating(comment.getRating().getStarRating())
                 .timeTaken(comment.getRating().getTimeTaken())
                 .amountStudy(comment.getRating().getAmountStudy())

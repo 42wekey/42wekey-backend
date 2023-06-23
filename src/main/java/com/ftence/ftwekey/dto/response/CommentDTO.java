@@ -18,7 +18,7 @@ public class CommentDTO {
     private double userLevel;
     private Long commentId;
     private String content;
-    private LocalDateTime updateTime;
+    private LocalDateTime createTime;
     private double starRating;
     private String timeTaken;
     private String amountStudy;
