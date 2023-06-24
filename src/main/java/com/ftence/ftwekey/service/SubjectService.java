@@ -138,12 +138,18 @@ public class SubjectService {
 
         List<SubjectRankInfoDTO> list = new ArrayList<>();
 
+
         for (Subject s : rank) {
+
+            Double starRating = ratingRepository.starRatingAvg(s.getId());
+            
+            if (starRating == null)
+                starRating = 0D;
 
             list.add(SubjectRankInfoDTO.builder()
                     .subjectName(s.getName())
                     .circle(s.getCircle())
-                    .starRating(ratingRepository.starRatingAvg(s.getId()))
+                    .starRating(starRating)
                     .build());
         }
 
