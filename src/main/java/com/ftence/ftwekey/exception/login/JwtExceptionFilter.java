@@ -1,6 +1,5 @@
 package com.ftence.ftwekey.exception.login;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 

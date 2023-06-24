@@ -51,7 +51,6 @@ public class CommentController {
                             @RequestBody CommentRequestDTO commentRequestDTO,
                             @AuthenticationPrincipal PrincipalDetails user) {
 
-        // todo commentId 검증
         commentService.editComment(commentId, commentRequestDTO, user);
     }
 }

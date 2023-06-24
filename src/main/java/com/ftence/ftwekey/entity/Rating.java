@@ -16,13 +16,12 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Entity
 public class Rating {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer starRating;
-
     private String timeTaken;
-
     private String amountStudy;
     private String bonus;
     private String difficulty;

@@ -7,6 +7,7 @@ import org.springframework.security.web.firewall.HttpFirewall;
 
 @Configuration
 public class AppConfig {
+
     @Bean
     public HttpFirewall defaultHttpFirewall() {
         return new DefaultHttpFirewall();

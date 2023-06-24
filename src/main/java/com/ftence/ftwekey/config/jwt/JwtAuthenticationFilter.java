@@ -1,6 +1,8 @@
 package com.ftence.ftwekey.config.jwt;
 
 import com.ftence.ftwekey.config.auth.PrincipalDetails;
+import com.ftence.ftwekey.constant.ErrorMessage;
+import com.ftence.ftwekey.constant.JwtProperties;
 import com.ftence.ftwekey.entity.User;
 import com.ftence.ftwekey.exception.login.NotValidTokenException;
 import com.ftence.ftwekey.repository.UserRepository;
@@ -41,7 +43,7 @@ public class JwtAuthenticationFilter implements Filter {
         } else if (!bearer.startsWith(JwtProperties.TOKEN_PREFIX)) {
 
             log.error("Authorization Header error. AUTHORIZATION 헤더={}", bearer);
-            throw new NotValidTokenException("Authorization Header error");
+            throw new NotValidTokenException(ErrorMessage.AUTHORIZATION_HEADER_MESSAGE);
         } else {
             try {
                 jwtToken = bearer.substring(JwtProperties.TOKEN_PREFIX.length());

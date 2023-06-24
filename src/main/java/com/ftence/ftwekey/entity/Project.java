@@ -13,9 +13,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 public class Project {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -129,7 +131,6 @@ public class Project {
             webserv = false;
         if (ft_irc == null)
             ft_irc = false;
-
 
         if (ft_transcendence == null)
             ft_transcendence = false;

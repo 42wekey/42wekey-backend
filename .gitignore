@@ -236,4 +236,6 @@ HELP.md
 
 
 ## test file
-**/test/
+**/test/java/com/ftence/ftwekey/repository/*.java
+**/test/java/com/ftence/ftwekey/service/*.java
+**/test/java/com/ftence/ftwekey/*.java

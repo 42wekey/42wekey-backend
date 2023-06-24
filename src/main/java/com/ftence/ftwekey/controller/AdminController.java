@@ -2,7 +2,6 @@ package com.ftence.ftwekey.controller;
 
 import com.ftence.ftwekey.dto.request.SubjectRequestDTO;
 import com.ftence.ftwekey.service.AdminService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,5 +1,7 @@
 package com.ftence.ftwekey.service;
 
+import com.ftence.ftwekey.constant.CommentProperties;
+import com.ftence.ftwekey.constant.SubjectProperties;
 import com.ftence.ftwekey.dto.response.*;
 import com.ftence.ftwekey.entity.Project;
 import com.ftence.ftwekey.entity.Subject;
@@ -26,11 +28,11 @@ public class SubjectService {
         List<SubjectRankDTO> list = new ArrayList<>();
 
         list.add(SubjectRankDTO.builder()
-                .title("평점 높은")
+                .title(CommentProperties.Rating_Rank)
                 .rank(makeSubjectRank(subjectRepository.getRatingRank()))
                 .build());
         list.add(SubjectRankDTO.builder()
-                .title("리뷰 많은")
+                .title(CommentProperties.REVIEW_RANK)
                 .rank(makeSubjectRank(subjectRepository.getReviewRank()))
                 .build());
 
@@ -64,69 +66,69 @@ public class SubjectService {
     private boolean checkSubjectSuccess(String subjectName, Project project) {
 
         // 0 circle
-        if (subjectName.equals("Libft"))
+        if (subjectName.equals(SubjectProperties.LIBFT))
             return project.getLibft();
         // 1 circle
-        if (subjectName.equals("ft_printf"))
+        if (subjectName.equals(SubjectProperties.FT_PRINTF))
             return project.getFt_printf();
-        if (subjectName.equals("get_next_line"))
+        if (subjectName.equals(SubjectProperties.GET_NEXT_LINE))
             return project.getGet_next_line();
-        if (subjectName.equals("Born2beroot"))
+        if (subjectName.equals(SubjectProperties.BORN2BEROOT))
             return project.getBorn2beroot();
         // 2circle
-        if (subjectName.equals("minitalk"))
+        if (subjectName.equals(SubjectProperties.MINITALK))
             return project.getMinitalk();
-        if (subjectName.equals("pipex"))
+        if (subjectName.equals(SubjectProperties.PIPEX))
             return project.getPipex();
-        if (subjectName.equals("so_long"))
+        if (subjectName.equals(SubjectProperties.SO_LONG))
             return project.getSo_long();
-        if (subjectName.equals("FdF"))
+        if (subjectName.equals(SubjectProperties.FDF))
             return project.getFdf();
-        if (subjectName.equals("fract-ol"))
+        if (subjectName.equals(SubjectProperties.FRACT_OL))
             return project.getFract_ol();
-        if (subjectName.equals("push_swap"))
+        if (subjectName.equals(SubjectProperties.PUSH_SWAP))
             return project.getPush_swap();
         // 3 circle
-        if (subjectName.equals("minishell"))
+        if (subjectName.equals(SubjectProperties.MINISHELL))
             return project.getMinishell();
-        if (subjectName.equals("Philosophers"))
+        if (subjectName.equals(SubjectProperties.PHILOSOPHERS))
             return project.getPhilosopher();
         // 4 circle
-        if (subjectName.equals("NetPractice"))
+        if (subjectName.equals(SubjectProperties.NETPRACTICE))
             return project.getNetpractice();
-        if (subjectName.equals("cub3d"))
+        if (subjectName.equals(SubjectProperties.CUB3D))
             return project.getCub3d();
-        if (subjectName.equals("miniRT"))
+        if (subjectName.equals(SubjectProperties.MINIRT))
             return project.getMinirt();
-        if (subjectName.equals("CPP Module 00"))
+        if (subjectName.equals(SubjectProperties.CPP_MODULE_00))
             return project.getCpp00();
-        if (subjectName.equals("CPP Module 01"))
+        if (subjectName.equals(SubjectProperties.CPP_MODULE_01))
             return project.getCpp01();
-        if (subjectName.equals("CPP Module 02"))
+        if (subjectName.equals(SubjectProperties.CPP_MODULE_02))
             return project.getCpp02();
-        if (subjectName.equals("CPP Module 03"))
+        if (subjectName.equals(SubjectProperties.CPP_MODULE_03))
             return project.getCpp03();
-        if (subjectName.equals("CPP Module 04"))
+        if (subjectName.equals(SubjectProperties.CPP_MODULE_04))
             return project.getCpp04();
         // 5 circle
-        if (subjectName.equals("CPP Module 05"))
+        if (subjectName.equals(SubjectProperties.CPP_MODULE_05))
             return project.getCpp05();
-        if (subjectName.equals("CPP Module 06"))
+        if (subjectName.equals(SubjectProperties.CPP_MODULE_06))
             return project.getCpp06();
-        if (subjectName.equals("CPP Module 07"))
+        if (subjectName.equals(SubjectProperties.CPP_MODULE_07))
             return project.getCpp07();
-        if (subjectName.equals("CPP Module 08"))
+        if (subjectName.equals(SubjectProperties.CPP_MODULE_08))
             return project.getCpp08();
-        if (subjectName.equals("CPP Module 09"))
+        if (subjectName.equals(SubjectProperties.CPP_MODULE_09))
             return project.getCpp09();
-        if (subjectName.equals("Inception"))
+        if (subjectName.equals(SubjectProperties.INCEPTION))
             return project.getInception();
-        if (subjectName.equals("webserv"))
+        if (subjectName.equals(SubjectProperties.WEBSERV))
             return project.getWebserv();
-        if (subjectName.equals("ft_irc"))
+        if (subjectName.equals(SubjectProperties.FT_IRC))
             return project.getFt_irc();
         // 6 circle
-        if (subjectName.equals("ft_transcendence"))
+        if (subjectName.equals(SubjectProperties.FT_TRANSCENDENCE))
             return project.getFt_transcendence();
 
         return false;

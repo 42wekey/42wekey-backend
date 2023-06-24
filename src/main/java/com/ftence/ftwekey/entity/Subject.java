@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
 @Builder
@@ -13,6 +16,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 public class Subject {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

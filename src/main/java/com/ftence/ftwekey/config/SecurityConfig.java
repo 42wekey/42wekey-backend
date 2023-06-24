@@ -3,6 +3,7 @@ package com.ftence.ftwekey.config;
 import com.ftence.ftwekey.config.jwt.JwtAuthenticationFilter;
 import com.ftence.ftwekey.config.jwt.JwtUtil;
 import com.ftence.ftwekey.config.oauth.CustomOAuth2UserService;
+import com.ftence.ftwekey.constant.ErrorMessage;
 import com.ftence.ftwekey.exception.login.JwtExceptionFilter;
 import com.ftence.ftwekey.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -63,7 +63,6 @@ public class SecurityConfig {
                 .antMatchers("/subject/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_GOD')")
                 .antMatchers("/comment/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_GOD')")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_GOD')")
-                .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
@@ -88,7 +87,7 @@ public class SecurityConfig {
                                                         AuthenticationException exception) throws IOException, ServletException {
 
                         log.error("oauth2 로그인 실패 {}", exception.getMessage());
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ErrorMessage.UNAUTHORIZED);
                     }
                 })
                 .userInfoEndpoint()

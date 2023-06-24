@@ -1,9 +1,9 @@
 package com.ftence.ftwekey.service;
 
 import com.ftence.ftwekey.config.auth.PrincipalDetails;
+import com.ftence.ftwekey.constant.SubjectProperties;
 import com.ftence.ftwekey.dto.response.*;
 import com.ftence.ftwekey.entity.*;
-import com.ftence.ftwekey.exception.UsernameException;
 import com.ftence.ftwekey.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,6 @@ public class UserService {
 
     public UserInfoDTO getUserInfo(String intraId) {
 
-        // todo 예외 처리
         User user = userRepository.findByIntraId(intraId);
 
         int cntComment = commentRepository.getUserCommentCnt(user.getId());
@@ -47,7 +46,6 @@ public class UserService {
 
     public List<UserCommentDTO> getUserComments(String intraId) {
 
-        // todo 예외 처리
         User user = userRepository.findByIntraId(intraId);
 
         return commentRepository.getUserComments(user.getId())
@@ -57,8 +55,6 @@ public class UserService {
     }
 
     public List<LikeCommentDTO> getUserLikeComments(PrincipalDetails user) {
-
-        // todo 예외 처리
 
         return heartRepository.getUserLikeComments(user.getUser().getId())
                 .stream()
@@ -123,7 +119,6 @@ public class UserService {
 
     private LikeCommentDTO convertEntityToLikeCommentDto(Heart heart) {
 
-        // todo 예외처리
         Comment comment = heart.getComment();
         Subject subject = comment.getSubject();
         Rating rating = comment.getRating();
@@ -151,79 +146,77 @@ public class UserService {
 
         // 0 circle
         if (project.getLibft())
-            list.add("Libft");
+            list.add(SubjectProperties.LIBFT);
         // 1 circle
         if (project.getFt_printf())
-            list.add("ft_printf");
+            list.add(SubjectProperties.FT_PRINTF);
         if (project.getGet_next_line())
-            list.add("get_next_line");
+            list.add(SubjectProperties.GET_NEXT_LINE);
         if (project.getBorn2beroot())
-            list.add("Born2beroot");
+            list.add(SubjectProperties.BORN2BEROOT);
         // 2 circle
         if (project.getMinitalk())
-            list.add("minitalk");
+            list.add(SubjectProperties.MINITALK);
         if (project.getPipex())
-            list.add("pipex");
+            list.add(SubjectProperties.PIPEX);
         if (project.getSo_long())
-            list.add("so_long");
+            list.add(SubjectProperties.SO_LONG);
         if (project.getFdf())
-            list.add("FdF");
+            list.add(SubjectProperties.FDF);
         if (project.getFract_ol())
-            list.add("fract-ol");
+            list.add(SubjectProperties.FRACT_OL);
         if (project.getPush_swap())
-            list.add("push_swap");
+            list.add(SubjectProperties.PUSH_SWAP);
         // 3 circle
         if (project.getMinishell())
-            list.add("minishell");
+            list.add(SubjectProperties.MINISHELL);
         if (project.getPhilosopher())
-            list.add("Philosophers");
+            list.add(SubjectProperties.PHILOSOPHERS);
         // 4 circle
         if (project.getNetpractice())
-            list.add("NetPractice");
+            list.add(SubjectProperties.NETPRACTICE);
         if (project.getCub3d())
-            list.add("cub3d");
+            list.add(SubjectProperties.CUB3D);
         if (project.getMinirt())
-            list.add("miniRT");
+            list.add(SubjectProperties.MINIRT);
         if (project.getCpp00())
-            list.add("CPP Module 00");
+            list.add(SubjectProperties.CPP_MODULE_00);
         if (project.getCpp01())
-            list.add("CPP Module 01");
+            list.add(SubjectProperties.CPP_MODULE_01);
         if (project.getCpp02())
-            list.add("CPP Module 02");
+            list.add(SubjectProperties.CPP_MODULE_02);
         if (project.getCpp03())
-            list.add("CPP Module 03");
+            list.add(SubjectProperties.CPP_MODULE_03);
         if (project.getCpp04())
-            list.add("CPP Module 04");
+            list.add(SubjectProperties.CPP_MODULE_04);
         // 5 circle
         if (project.getCpp05())
-            list.add("CPP Module 05");
+            list.add(SubjectProperties.CPP_MODULE_05);
         if (project.getCpp06())
-            list.add("CPP Module 06");
+            list.add(SubjectProperties.CPP_MODULE_06);
         if (project.getCpp07())
-            list.add("CPP Module 07");
+            list.add(SubjectProperties.CPP_MODULE_07);
         if (project.getCpp08())
-            list.add("CPP Module 08");
+            list.add(SubjectProperties.CPP_MODULE_08);
         if (project.getCpp09())
-            list.add("CPP Module 09");
+            list.add(SubjectProperties.CPP_MODULE_09);
         if (project.getInception())
-            list.add("Inception");
+            list.add(SubjectProperties.INCEPTION);
         if (project.getWebserv())
-            list.add("webserv");
+            list.add(SubjectProperties.WEBSERV);
         if (project.getFt_irc())
-            list.add("ft_irc");
+            list.add(SubjectProperties.FT_IRC);
         // 6 circle
         if (project.getFt_transcendence())
-            list.add("ft_transcendence");
+            list.add(SubjectProperties.FT_TRANSCENDENCE);
 
         return list;
     }
 
     private UnreviewedSubjectDTO convertEntityToUnreviewedSubjectDto(String subjectName) {
 
-        // todo 예외처리
         Subject subject = subjectRepository.findByName(subjectName);
-        String a= subject.getName();
-        int b = subject.getCircle();
+
         return new UnreviewedSubjectDTO(subject.getName(), subject.getCircle());
     }
 }

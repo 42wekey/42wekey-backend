@@ -1,6 +1,8 @@
 package com.ftence.ftwekey.service;
 
 import com.ftence.ftwekey.config.auth.PrincipalDetails;
+import com.ftence.ftwekey.constant.CommentProperties;
+import com.ftence.ftwekey.constant.ErrorMessage;
 import com.ftence.ftwekey.dto.request.CommentRequestDTO;
 import com.ftence.ftwekey.dto.response.CommentDTO;
 import com.ftence.ftwekey.dto.response.RecentCommentDTO;
@@ -67,12 +69,12 @@ public class CommentService {
 
                 heartRepository.deleteAll(hearts);
                 comment.setLikeCnt(comment.getLikeCnt() - 1);
-                body = "delete likes";
+                body = CommentProperties.DELETE_LIKES;
             } else {
 
                 heartRepository.save(new Heart(null, comment, user.getUser()));
                 comment.setLikeCnt(comment.getLikeCnt() + 1);
-                body = "add likes";
+                body = CommentProperties.ADD_LIKES;
             }
             commentRepository.save(comment);
 
@@ -81,7 +83,7 @@ public class CommentService {
         } catch (NoSuchElementException e) {
 
             log.error("comment id not valid. id={}", commentId);
-            return ResponseEntity.badRequest().body("Invalid data format");
+            return ResponseEntity.badRequest().body(ErrorMessage.INVALID_DATA_MESSAGE);
         }
     }
 
@@ -97,7 +99,6 @@ public class CommentService {
 
     public void editComment(Long commentId, CommentRequestDTO commentRequestDTO, PrincipalDetails user) {
 
-        // todo 예외 처리
         // todo 1 작성자가 가 맞는지, 2 findbyid 예외처리
         Comment comment = commentRepository.findById(commentId).get();
         Rating rating = comment.getRating();

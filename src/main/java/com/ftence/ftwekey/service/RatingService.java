@@ -1,13 +1,12 @@
 package com.ftence.ftwekey.service;
 
+import com.ftence.ftwekey.constant.CommentProperties;
 import com.ftence.ftwekey.dto.response.RatingValueDTO;
 import com.ftence.ftwekey.dto.response.SubjectRatingDTO;
 import com.ftence.ftwekey.entity.Subject;
-import com.ftence.ftwekey.repository.CommentRepository;
 import com.ftence.ftwekey.repository.RatingRepository;
 import com.ftence.ftwekey.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,15 +17,6 @@ import java.util.List;
 @Service
 public class RatingService {
 
-    @Value("${time-taken}")
-    private String timeTakenValue;
-    @Value("${amount-study}")
-    private String amountStudyValue;
-    @Value("${bonus}")
-    private String bonusValue;
-    @Value("${difficulty}")
-    private String difficultyValue;
-
     private final RatingRepository ratingRepository;
     private final SubjectRepository subjectRepository;
 
@@ -36,7 +26,6 @@ public class RatingService {
 
         return entityToSubjectRatingDTO(subject);
     }
-
 
     private SubjectRatingDTO entityToSubjectRatingDTO(Subject subject) {
 
@@ -50,10 +39,10 @@ public class RatingService {
                 .commentCnt(subject.getCommentCnt())
                 .avgStarRating(ratingRepository.starRatingAvg(subject.getId()))
                 .totalStarRating(totalStarRating)
-                .timeTaken(getRatingValueDTO(subject, "timeTaken", timeTakenValue))
-                .amountStudy(getRatingValueDTO(subject, "amountStudy", amountStudyValue))
-                .bonus(getRatingValueDTO(subject, "bonus", bonusValue))
-                .difficulty(getRatingValueDTO(subject, "difficulty", difficultyValue))
+                .timeTaken(getRatingValueDTO(subject, CommentProperties.TIME_TAKEN, CommentProperties.TIME_TAKEN_VALUES))
+                .amountStudy(getRatingValueDTO(subject, CommentProperties.AMOUNT_STUDY, CommentProperties.AMOUNT_STUDY_VALUES))
+                .bonus(getRatingValueDTO(subject, CommentProperties.BONUS, CommentProperties.BONUS_VALUES))
+                .difficulty(getRatingValueDTO(subject, CommentProperties.DIFFICULTY, CommentProperties.DIFFICULTY_VALUES))
                 .build();
     }
 
@@ -67,16 +56,16 @@ public class RatingService {
 
         for (String v : value) {
             switch (status) {
-                case "timeTaken":
+                case CommentProperties.TIME_TAKEN:
                     percentage.add(ratingRepository.timeTakenPercentage(subject.getId(), v));
                     break;
-                case "amountStudy":
+                case CommentProperties.AMOUNT_STUDY:
                     percentage.add(ratingRepository.amountStudyPercentage(subject.getId(), v));
                     break;
-                case "bonus":
+                case CommentProperties.BONUS:
                     percentage.add(ratingRepository.bonusPercentage(subject.getId(), v));
                     break;
-                case "difficulty":
+                case CommentProperties.DIFFICULTY:
                     percentage.add(ratingRepository.difficultyPercentage(subject.getId(), v));
                     break;
                 default:

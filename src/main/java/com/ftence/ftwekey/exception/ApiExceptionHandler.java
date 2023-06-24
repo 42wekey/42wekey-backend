@@ -19,9 +19,6 @@ public class ApiExceptionHandler {
     public ResponseEntity<Object> handleJwtInvalidException(ValidFailException e) {
 
         HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
-
-        // todo 메세지를 예외마다 다 쪼개가지고 처리해야 함
-
         ApiException apiException = new ApiException(e.getClass().getSimpleName(), httpStatus, ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
 
         return new ResponseEntity<>(apiException, httpStatus);
@@ -31,7 +28,6 @@ public class ApiExceptionHandler {
     public ResponseEntity<Object> invalidUserException(UsernameException e) {
 
         HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
-
         ApiException apiException = new ApiException(e.getClass().getSimpleName(), httpStatus, ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
 
         return new ResponseEntity<>(apiException, httpStatus);
@@ -45,6 +41,4 @@ public class ApiExceptionHandler {
 
         return new ResponseEntity<>(apiException, httpStatus);
     }
-
-
 }

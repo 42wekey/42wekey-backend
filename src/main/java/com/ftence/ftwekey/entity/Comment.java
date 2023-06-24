@@ -1,7 +1,6 @@
 package com.ftence.ftwekey.entity;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,6 +19,7 @@ import java.time.LocalDateTime;
 @Entity
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Comment {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

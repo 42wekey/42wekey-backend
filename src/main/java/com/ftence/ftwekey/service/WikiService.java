@@ -31,12 +31,10 @@ public class WikiService {
     public boolean setWiki(PrincipalDetails principalUser, String subjectName, WikiRequestDTO wikiRequestDTO) {
 
         Subject subject = subjectRepository.findByName(subjectName);
-        // todo subject 예외처리
 
         if (subject.getWikiId() == wikiRequestDTO.getId()) {
 
             User user = userRepository.findByIntraId(principalUser.getUsername());
-            // todo 예외처리 nullpointerexception
 
             wikiRequestDtoToEntity(subject, user, wikiRequestDTO);
 

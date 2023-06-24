@@ -10,13 +10,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

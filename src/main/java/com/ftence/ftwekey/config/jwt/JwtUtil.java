@@ -3,6 +3,8 @@ package com.ftence.ftwekey.config.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.ftence.ftwekey.constant.JwtProperties;
+import com.ftence.ftwekey.constant.OAuthProperties;
 import com.ftence.ftwekey.entity.User;
 import com.ftence.ftwekey.exception.login.NotValidTokenException;
 import com.ftence.ftwekey.repository.UserRepository;
@@ -23,6 +25,7 @@ import java.util.LinkedHashMap;
 @Slf4j
 @Service
 public class JwtUtil {
+
     @Value("${jwt.secret-key}")
     private String tokenSecret;
 
@@ -40,13 +43,13 @@ public class JwtUtil {
         ZoneId defaultZoneId = ZoneId.systemDefault();
         Date expireDate = Date.from(localDateTime.atZone(defaultZoneId).toInstant());
 
-        ArrayList array = (ArrayList) oAuth2User.getAttributes().get("cursus_users");
+        ArrayList array = (ArrayList) oAuth2User.getAttributes().get(OAuthProperties.CURSUS_USERS);
         LinkedHashMap object = (LinkedHashMap) array.get(1);
 
         String token = JWT.create()
-                .withSubject(oAuth2User.getAttributes().get("login").toString())
-                .withClaim("id", Long.parseLong(oAuth2User.getAttributes().get("id").toString()))
-                .withClaim("level", (double) object.get("level"))
+                .withSubject(oAuth2User.getAttributes().get(OAuthProperties.LOGIN).toString())
+                .withClaim(OAuthProperties.ID, Long.parseLong(oAuth2User.getAttributes().get(OAuthProperties.ID).toString()))
+                .withClaim(OAuthProperties.LEVEL, (double) object.get(OAuthProperties.LEVEL))
                 .withExpiresAt(expireDate)
                 .withIssuedAt(new Date())
                 .sign(Algorithm.HMAC256(tokenSecret));
@@ -63,9 +66,9 @@ public class JwtUtil {
         try {
             DecodedJWT verify = JWT.require(Algorithm.HMAC256(tokenSecret)).build().verify(token);
 
-            sub = verify.getClaim("sub").asString();
-            id = verify.getClaim("id").asLong();
-            level = verify.getClaim("level").asDouble();
+            sub = verify.getClaim(OAuthProperties.SUB).asString();
+            id = verify.getClaim(OAuthProperties.ID).asLong();
+            level = verify.getClaim(OAuthProperties.LEVEL).asDouble();
 
             User user = userRepository.findByUniqueId(id);
 

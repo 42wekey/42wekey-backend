@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Entity
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Heart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
