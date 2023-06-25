@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class VerifyResult {
-
-    private boolean success;
     private Long uniqueId;
     private String intraId;
     private double level;

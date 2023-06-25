@@ -59,7 +59,6 @@ public class SubjectService {
         Subject subject = subjectRepository.findByName(subjectName);
         Project project = projectRepository.findByUser(user);
 
-
         return new SubjectDescriptionDTO(subject.getDescription(), checkSubjectSuccess(subjectName, project));
     }
 
@@ -138,11 +137,10 @@ public class SubjectService {
 
         List<SubjectRankInfoDTO> list = new ArrayList<>();
 
-
         for (Subject s : rank) {
 
             Double starRating = ratingRepository.starRatingAvg(s.getId());
-            
+
             if (starRating == null)
                 starRating = 0D;
 

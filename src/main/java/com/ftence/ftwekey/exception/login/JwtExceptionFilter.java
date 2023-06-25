@@ -19,7 +19,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         try {
             chain.doFilter(request, response);
 
-        } catch (NotValidTokenException e) {
+        } catch (NotValidTokenException | HeaderException e) {
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("/exception/login");
             dispatcher.forward(request, response);

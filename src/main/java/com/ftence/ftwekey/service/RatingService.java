@@ -49,10 +49,9 @@ public class RatingService {
     private RatingValueDTO getRatingValueDTO(Subject subject, String status, String values) {
 
         List<String> value = List.of(values.split(", "));
+        List<Double> percentage = new ArrayList<>();
 
         String title;
-
-        List<Double> percentage = new ArrayList<>();
 
         for (String v : value) {
             switch (status) {

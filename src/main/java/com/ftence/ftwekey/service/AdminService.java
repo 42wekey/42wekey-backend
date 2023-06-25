@@ -23,8 +23,6 @@ public class AdminService {
 
     public List<SubjectRequestDTO> getSubjectList() {
 
-        List<Subject> subjects = subjectRepository.findAll();
-
         return subjectRepository.findAll()
                 .stream()
                 .map(this::convertEntityToSubjectRequestDto)

@@ -60,6 +60,7 @@ public class WikiService {
                 .build();
 
         wikiRepository.save(wiki);
+
         subject.setWikiId(wiki.getId());
         subjectRepository.save(subject);
     }

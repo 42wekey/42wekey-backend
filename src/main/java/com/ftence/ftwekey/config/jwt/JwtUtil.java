@@ -76,7 +76,6 @@ public class JwtUtil {
                 throw (new NoResultException());
 
             return VerifyResult.builder()
-                    .success(true)
                     .uniqueId(id)
                     .intraId(sub)
                     .level(level)
@@ -85,6 +84,7 @@ public class JwtUtil {
         } catch (Exception e) {
 
             log.error("JWT 인증 실패. [{}]  sub={}, id={}, level={}, token={}", e, sub, id, level, token);
+
             throw new NotValidTokenException(e.getClass().getSimpleName());
         }
     }

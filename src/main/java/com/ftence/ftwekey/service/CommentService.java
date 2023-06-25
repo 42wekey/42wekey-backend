@@ -36,12 +36,13 @@ public class CommentService {
         List<RecentCommentDTO> list = new ArrayList<>();
         List<Comment> comments = commentRepository.getRecentComment();
 
-        for (Comment c : comments) {
+        for (Comment comment : comments) {
+
             list.add(RecentCommentDTO.builder()
-                    .subjectName(c.getSubject().getName())
-                    .starRating(c.getRating().getStarRating())
-                    .content(c.getContent())
-                    .createTime(c.getCreateTime())
+                    .subjectName(comment.getSubject().getName())
+                    .starRating(comment.getRating().getStarRating())
+                    .content(comment.getContent())
+                    .createTime(comment.getCreateTime())
                     .build());
         }
         return list;
@@ -99,9 +100,16 @@ public class CommentService {
 
     public void editComment(Long commentId, CommentRequestDTO commentRequestDTO, PrincipalDetails user) {
 
-        // todo 1 작성자가 가 맞는지, 2 findbyid 예외처리
         Comment comment = commentRepository.findById(commentId).get();
         Rating rating = comment.getRating();
+
+        if (!comment.getUser().getIntraId().equals(user.getName())) {
+
+            log.warn("comment 작성자가 아닙니다. 작성자={}, user={}", comment.getUser().getIntraId(), user.getName());
+
+            // todo 리턴 값 프론트와 상의하기
+            return;
+        }
 
         rating.setStarRating(commentRequestDTO.getStarRating());
         rating.setTimeTaken(commentRequestDTO.getTimeTaken());
