@@ -104,6 +104,7 @@ public class CommentService {
     public void editComment(Long commentId, CommentRequestDTO commentRequestDTO, PrincipalDetails user) {
 
         Comment comment = commentRepository.findById(commentId).get();
+        Subject subject = comment.getSubject();
         Rating rating = comment.getRating();
 
         if (!comment.getUser().getIntraId().equals(user.getName())) {
@@ -126,6 +127,9 @@ public class CommentService {
         comment.setUserLevel(user.getLevel());
 
         commentRepository.save(comment);
+
+        subject.setRating(ratingRepository.starRatingAvg(subject.getId()));
+        subjectRepository.save(subject);
     }
 
     public boolean commentExists(Subject subject, User user) {
@@ -189,6 +193,7 @@ public class CommentService {
         commentRepository.save(comment);
 
         subject.setCommentCnt(subject.getCommentCnt() + 1);
+        subject.setRating(ratingRepository.starRatingAvg(subject.getId()));
         subjectRepository.save(subject);
     }
 }

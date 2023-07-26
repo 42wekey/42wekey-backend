@@ -26,4 +26,5 @@ public class Subject {
     private Long wikiId;
     private String description;
     private int commentCnt;
+    private double rating;
 }
