@@ -7,10 +7,7 @@ import com.ftence.ftwekey.dto.request.CommentRequestDTO;
 import com.ftence.ftwekey.dto.response.CommentDTO;
 import com.ftence.ftwekey.dto.response.RecentCommentDTO;
 import com.ftence.ftwekey.entity.*;
-import com.ftence.ftwekey.repository.CommentRepository;
-import com.ftence.ftwekey.repository.HeartRepository;
-import com.ftence.ftwekey.repository.RatingRepository;
-import com.ftence.ftwekey.repository.SubjectRepository;
+import com.ftence.ftwekey.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +27,8 @@ public class CommentService {
     private final SubjectRepository subjectRepository;
     private final HeartRepository heartRepository;
     private final RatingRepository ratingRepository;
+    private final ProjectRepository projectRepository;
+    private final UserService userService;
 
     public List<RecentCommentDTO> getRecentComment() {
 
@@ -92,9 +91,13 @@ public class CommentService {
 
         Subject subject = subjectRepository.findByName(subjectName);
 
+        // 이미 깬 과제인지 확인
+        if (!checkPassSubject(user.getUser(), subject))
+            return;
         // 서브젝트에 이미 후기를 작성했는지 확인
         if (commentRepository.checkAlreadyReviewed(user.getUser().getId(), subject.getId()) == 1)
             return;
+
         convertCommentRequestDtoToEntity(subject, commentRequestDTO, user);
     }
 
@@ -128,6 +131,14 @@ public class CommentService {
     public boolean commentExists(Subject subject, User user) {
 
         return commentRepository.checkAlreadyReviewed(user.getId(), subject.getId()) == 1;
+    }
+
+    private boolean checkPassSubject(User user, Subject subject) {
+
+        Project project = projectRepository.findByUser(user);
+        List<String> completeSubjects = userService.getCompleteSubjects(project);
+
+        return completeSubjects.contains(subject.getName());
     }
 
     private CommentDTO convertEntityToCommentDTO(Comment comment, User user, Subject subject) {

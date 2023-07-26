@@ -140,7 +140,7 @@ public class UserService {
                 .build();
     }
 
-    private List<String> getCompleteSubjects(Project project) {
+    public List<String> getCompleteSubjects(Project project) {
 
         List<String> list = new ArrayList<>();
 
