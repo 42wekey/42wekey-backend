@@ -125,6 +125,11 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    public boolean commentExists(Subject subject, User user) {
+
+        return commentRepository.checkAlreadyReviewed(user.getId(), subject.getId()) == 1;
+    }
+
     private CommentDTO convertEntityToCommentDTO(Comment comment, User user, Subject subject) {
 
         boolean isLiked;

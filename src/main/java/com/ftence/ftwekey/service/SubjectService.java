@@ -22,6 +22,7 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final ProjectRepository projectRepository;
     private final RatingRepository ratingRepository;
+    private final CommentService commentService;
 
     public List<SubjectRankDTO> getRank() {
 
@@ -59,10 +60,20 @@ public class SubjectService {
         Subject subject = subjectRepository.findByName(subjectName);
         Project project = projectRepository.findByUser(user);
 
-        return new SubjectDescriptionDTO(subject.getDescription(), checkSubjectSuccess(subjectName, project));
+        return SubjectDescriptionDTO.builder()
+                .subjectDescription(subject.getDescription())
+                .pass(checkPassSubject(subjectName, project))
+                .write(commentService.commentExists(subject, user))
+                .build();
     }
 
-    private boolean checkSubjectSuccess(String subjectName, Project project) {
+    /***
+     * 과제 통과 여부
+     * @param subjectName
+     * @param project
+     * @return
+     */
+    private boolean checkPassSubject(String subjectName, Project project) {
 
         // 0 circle
         if (subjectName.equals(SubjectProperties.LIBFT))
